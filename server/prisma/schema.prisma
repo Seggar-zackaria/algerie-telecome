@@ -10,19 +10,69 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
   USER
   ADMIN
+  EDITOR
+}
+
+enum RegistrationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum ContentType {
+  NEWS
+  EVENT
+  TESTIMONIAL
+  ABOUT_SECTION
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   email     String   @unique
   password  String
-  name      String?
-  role      Role     @default(USER)
+  name      String
+  role      Role     @default(ADMIN)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Registration {
+  id          String             @id @default(uuid())
+  fullName    String
+  email       String
+  phone       String
+  type        String             // e.g., "Student", "Professional"
+  status      RegistrationStatus @default(PENDING)
+  message     String?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+model Content {
+  id          String      @id @default(uuid())
+  title       String
+  body        String
+  type        ContentType
+  imageUrl    String?
+  published   Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model HeroSlide {
+  id          String   @id @default(uuid())
+  title       String
+  subtitle    String?
+  description String?
+  imageUrl    String
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
