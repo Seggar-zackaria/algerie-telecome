@@ -1,5 +1,5 @@
 import express from 'express';
-import { loginUser, registerAdmin } from '../controllers/auth.controller.js';
+import { loginUser, registerAdmin, getMe, logoutUser } from '../controllers/auth.controller.js';
 
 const router = express.Router();
 
@@ -82,5 +82,31 @@ router.post('/login', loginLimiter, validate(loginSchema), loginUser);
  *         description: User already exists
  */
 router.post('/register-admin', protect, admin, validate(registerAdminSchema), registerAdmin);
+
+/**
+ * @swagger
+ * /api/auth/me:
+ *   get:
+ *     summary: Get current logged in user
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User profile
+ */
+router.get('/me', protect, getMe);
+
+/**
+ * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     summary: Logout user
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Logged out
+ */
+router.post('/logout', logoutUser);
 
 export default router;

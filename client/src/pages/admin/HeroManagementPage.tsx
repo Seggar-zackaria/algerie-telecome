@@ -204,9 +204,7 @@ export function HeroManagementPage() {
                             },
                           });
                           
-                          // Construct URL. Backend returns relative path "/uploads/..."
-                          // We use the relative path directly, relying on Vite proxy in dev
-                          // and proper serving in prod.
+                     
                           const fullUrl = response.data.filePath;
                           
                           form.setValue("imageUrl", fullUrl);

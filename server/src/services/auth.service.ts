@@ -56,3 +56,17 @@ export const registerAdmin = async (data: { name: string; email: string; passwor
   
   throw new AppError('Invalid user data', 400);
 };
+
+export const getUserById = async (id: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+    },
+  });
+  return user;
+};
+
