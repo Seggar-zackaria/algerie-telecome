@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { prisma } from '../prisma.js';
 import { ContentType } from '@prisma/client';
+import * as contentService from '../services/content.service.js';
 
 // @desc    Get all content (Public, with optional type filter)
 // @route   GET /api/content
@@ -9,11 +9,7 @@ export const getContent = async (req: Request, res: Response) => {
   const { type } = req.query;
 
   try {
-    const whereClause = type ? { type: type as ContentType, published: true } : { published: true };
-    const content = await prisma.content.findMany({
-      where: whereClause,
-      orderBy: { createdAt: 'desc' },
-    });
+    const content = await contentService.getContent(type as string);
     res.json(content);
   } catch (_error) {
     res.status(500).json({ message: 'Server error' });
@@ -25,9 +21,7 @@ export const getContent = async (req: Request, res: Response) => {
 // @access  Private/Admin
 export const getAllContentAdmin = async (req: Request, res: Response) => {
   try {
-    const content = await prisma.content.findMany({
-      orderBy: { createdAt: 'desc' },
-    });
+    const content = await contentService.getAllContentAdmin();
     res.json(content);
   } catch (_error) {
     res.status(500).json({ message: 'Server error' });
@@ -41,15 +35,16 @@ export const createContent = async (req: Request, res: Response) => {
   const { title, body, type, imageUrl, published } = req.body;
 
   try {
-    const content = await prisma.content.create({
-      data: {
+    // Basic validation/coercion could happen here or in schemas
+    const contentData = {
         title,
         body,
         type: type as ContentType,
         imageUrl,
         published: published ?? true,
-      },
-    });
+    };
+    
+    const content = await contentService.createContent(contentData);
     res.status(201).json(content);
   } catch (_error) {
     console.error(_error);
@@ -65,16 +60,15 @@ export const updateContent = async (req: Request, res: Response) => {
   const { title, body, type, imageUrl, published } = req.body;
 
   try {
-    const content = await prisma.content.update({
-      where: { id },
-      data: {
+    const updateData = {
         title,
         body,
         type: type as ContentType,
         imageUrl,
         published,
-      },
-    });
+    };
+
+    const content = await contentService.updateContent(id, updateData);
     res.json(content);
   } catch (_error) {
     res.status(500).json({ message: 'Server error' });
@@ -88,9 +82,7 @@ export const deleteContent = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    await prisma.content.delete({
-      where: { id },
-    });
+    await contentService.deleteContent(id);
     res.json({ message: 'Content removed' });
   } catch (_error) {
     res.status(500).json({ message: 'Server error' });

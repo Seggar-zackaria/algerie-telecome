@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { prisma } from '../prisma.js';
 import { RegistrationStatus } from '@prisma/client';
+import * as registrationService from '../services/registration.service.js';
 
 // @desc    Submit a new registration (Public)
 // @route   POST /api/registrations
@@ -9,14 +9,8 @@ export const createRegistration = async (req: Request, res: Response) => {
   const { fullName, email, phone, type, message } = req.body;
 
   try {
-    const registration = await prisma.registration.create({
-      data: {
-        fullName,
-        email,
-        phone,
-        type,
-        message,
-      },
+    const registration = await registrationService.createRegistration({
+        fullName, email, phone, type, message
     });
     res.status(201).json(registration);
   } catch (error) {
@@ -30,9 +24,7 @@ export const createRegistration = async (req: Request, res: Response) => {
 // @access  Private/Admin
 export const getRegistrations = async (req: Request, res: Response) => {
   try {
-    const registrations = await prisma.registration.findMany({
-      orderBy: { createdAt: 'desc' },
-    });
+    const registrations = await registrationService.getRegistrations();
     res.json(registrations);
   } catch (_error) {
     res.status(500).json({ message: 'Server error' });
@@ -47,12 +39,7 @@ export const updateRegistrationStatus = async (req: Request, res: Response) => {
   const { status } = req.body;
 
   try {
-    const registration = await prisma.registration.update({
-      where: { id },
-      data: {
-        status: status as RegistrationStatus,
-      },
-    });
+    const registration = await registrationService.updateRegistrationStatus(id, status as RegistrationStatus);
     res.json(registration);
   } catch (_error) {
     res.status(500).json({ message: 'Server error' });

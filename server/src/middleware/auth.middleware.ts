@@ -15,7 +15,10 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     try {
       token = req.headers.authorization.split(' ')[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallbacksecret') as { id: string, role: string };
+      if (!process.env.JWT_SECRET) {
+         throw new Error('JWT_SECRET not defined');
+      }
+      const decoded = jwt.verify(token, process.env.JWT_SECRET) as { id: string, role: string };
 
       const user = await prisma.user.findUnique({
         where: { id: decoded.id },

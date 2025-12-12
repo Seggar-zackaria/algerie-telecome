@@ -3,7 +3,7 @@ import api from "@/lib/api";
 import { Plus, Edit, Trash } from "lucide-react";
 import { useAllContentAdminQuery, useDeleteContentMutation, useCreateContentMutation } from "@/hooks/useContent";
 import type { ContentType, CreateContentInput } from "@/hooks/useContent";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -36,7 +36,11 @@ export const ContentPage = () => {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    createMutation.mutate(newContent, {
+    const payload = {
+        ...newContent,
+        imageUrl: newContent.imageUrl === "" ? undefined : newContent.imageUrl
+    };
+    createMutation.mutate(payload, {
         onSuccess: () => {
             setIsCreateOpen(false);
             setNewContent({ title: "", body: "", type: "NEWS", published: true, imageUrl: "" });
@@ -58,6 +62,9 @@ export const ContentPage = () => {
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Add New Content</DialogTitle>
+                    <DialogDescription>
+                        Fill in the details below to create new content.
+                    </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleCreate} className="space-y-4">
                     <div className="space-y-2">

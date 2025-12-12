@@ -1,34 +1,13 @@
 import { Request, Response } from 'express';
-import bcrypt, { hash } from 'bcrypt';
-import { prisma } from '../prisma.js';
-import generateToken from '../utils/generateToken.js';
+import * as authService from '../services/auth.service.js';
 
 // @desc    Auth user & get token
 // @route   POST /api/auth/login
 // @access  Public
 export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-
-  try {
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
-
-    if (user && (await bcrypt.compare(password, user.password))) {
-      res.json({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        token: generateToken(String(user.id)),
-      });
-    } else {
-      res.status(401).json({ message: 'Invalid email or password' });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
-  }
+  const authData = await authService.loginUser(email, password);
+  res.json(authData);
 };
 
 // @desc    Register a new admin (For initial setup mostly)
@@ -36,44 +15,8 @@ export const loginUser = async (req: Request, res: Response) => {
 // @access  Public (Should be protected or removed in prod)
 export const registerAdmin = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
-
-  try {
-    const userExists = await prisma.user.findUnique({
-      where: { email },
-    });
-
-    if (userExists) {
-      res.status(400).json({ message: 'User already exists' });
-      return;
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await hash(password, salt);
-
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-        role: 'ADMIN',
-      },
-    });
-
-    if (user) {
-        res.status(201).json({
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            token: generateToken(String(user.id)),
-        });
-    } else {
-        res.status(400).json({ message: 'Invalid user data' });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
-  }
+  const userData = await authService.registerAdmin({ name, email, password });
+  res.status(201).json(userData);
 };
 
 
