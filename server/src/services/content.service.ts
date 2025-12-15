@@ -1,5 +1,5 @@
 import { prisma } from '../prisma.js';
-import { ContentType } from '@prisma/client';
+import { ContentType, Prisma } from '@prisma/client';
 
 export const getContent = async (type?: string) => {
   const whereClause = type
@@ -19,8 +19,8 @@ export const getAllContentAdmin = async () => {
 };
 
 export const createContent = async (data: {
-  title: string;
-  body: string;
+  title: Prisma.InputJsonValue;
+  body: Prisma.InputJsonValue;
   type: ContentType;
   imageUrl?: string;
   published: boolean;
@@ -33,8 +33,8 @@ export const createContent = async (data: {
 export const updateContent = async (
   id: string,
   data: {
-    title?: string;
-    body?: string;
+    title?: Prisma.InputJsonValue;
+    body?: Prisma.InputJsonValue;
     type?: ContentType;
     imageUrl?: string;
     published?: boolean;

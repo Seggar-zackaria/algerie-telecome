@@ -1,5 +1,6 @@
 import { prisma } from '../prisma.js';
 import { RegistrationStatus } from '@prisma/client';
+import { sendApprovalEmail } from './email.service.js';
 
 export const createRegistration = async (data: {
   fullName: string;
@@ -20,10 +21,16 @@ export const getRegistrations = async () => {
 };
 
 export const updateRegistrationStatus = async (id: string, status: RegistrationStatus) => {
-  return await prisma.registration.update({
+  const updatedRegistration = await prisma.registration.update({
     where: { id },
     data: {
       status,
     },
   });
+
+  if (status === 'APPROVED') {
+    await sendApprovalEmail(updatedRegistration.email, updatedRegistration.fullName);
+  }
+
+  return updatedRegistration;
 };

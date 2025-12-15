@@ -1,6 +1,9 @@
 import { CheckCircle2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export const AboutSection = () => {
+    const { t } = useTranslation();
+
     return (
         <section id="about" className="py-24 bg-white relative overflow-hidden">
             {/* Decorative background */}
@@ -18,30 +21,30 @@ export const AboutSection = () => {
                             />
                         </div>
                         {/* Experience Badge */}
-                        <div className="absolute -bottom-6 -right-6 bg-white p-6 rounded-xl shadow-xl border border-gray-100 hidden md:block">
+                        <div className="absolute -bottom-6 -right-6 rtl:-left-6 rtl:right-auto bg-white p-6 rounded-xl shadow-xl border border-gray-100 hidden md:block">
                             <p className="text-4xl font-bold text-primary">100%</p>
-                            <p className="text-gray-500 font-medium">Innovation</p>
+                            <p className="text-gray-500 font-medium">{t('about_badge_innovation')}</p>
                         </div>
                     </div>
 
                     <div className="space-y-6">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-primary text-sm font-medium">
                             <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                            Qui sommes-nous?
+                            {t('nav_about')}
                         </div>
                         <h2 className="text-4xl font-bold text-gray-900 leading-tight">
-                            Le hub de l'innovation et du savoir numérique
+                            {t('about_title')}
                         </h2>
                         <p className="text-lg text-gray-600 leading-relaxed">
-                            Le Skills Center d'Algérie Télécom est bien plus qu'un simple espace de travail. C'est un écosystème dynamique conçu pour inspirer, former et connecter les talents de demain.
+                            {t('about_description')}
                         </p>
 
                         <div className="grid sm:grid-cols-2 gap-4 pt-4">
                             {[
-                                "Formation de pointe",
-                                "Équipements modernes",
-                                "Communauté active",
-                                "Support expert"
+                                t('about_item_training'),
+                                t('about_item_equipment'),
+                                t('about_item_community'),
+                                t('about_item_support')
                             ].map((item, idx) => (
                                 <div key={idx} className="flex items-center gap-3">
                                     <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />

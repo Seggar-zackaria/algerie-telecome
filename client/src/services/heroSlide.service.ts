@@ -1,10 +1,11 @@
 import api from "@/lib/api";
+import type { LocalizedContent } from "@/lib/i18n-utils";
 
 export interface HeroSlide {
   id: string;
-  title: string;
+  title: LocalizedContent; // Changed to support i18n
   subtitle?: string;
-  description?: string;
+  description?: LocalizedContent; // Changed to support i18n
   imageUrl: string;
   order: number;
   isActive: boolean;
@@ -13,9 +14,9 @@ export interface HeroSlide {
 }
 
 export interface CreateHeroSlideData {
-  title: string;
+  title: LocalizedContent;
   subtitle?: string;
-  description?: string;
+  description?: LocalizedContent;
   imageUrl: string;
   order?: number;
   isActive?: boolean;

@@ -1,17 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { useContentQuery } from "@/hooks/useContent";
+import { useTranslation } from 'react-i18next';
+import { getLocalizedContent } from '@/lib/i18n-utils';
 
 export const NewsSection = () => {
-    const { data: news, isLoading } = useContentQuery('NEWS');
+    const { data: allContent, isLoading } = useContentQuery();
+    const { t, i18n } = useTranslation();
+
+    const news = allContent?.filter(item => item.type === 'NEWS' || item.type === 'EVENT');
 
     if (isLoading) {
         return (
-             <section id="news" className="py-24 bg-white">
+            <section id="news" className="py-24 bg-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-end mb-12">
                         <div>
-                            <h2 className="text-3xl font-bold text-gray-900">Actualités & Événements</h2>
-                            <p className="mt-4 text-lg text-gray-600">Restez informés de nos dernières activités.</p>
+                            <h2 className="text-3xl font-bold text-gray-900">{t('news_section_title')}</h2>
+                            <p className="mt-4 text-lg text-gray-600">{t('news_section_subtitle')}</p>
                         </div>
                     </div>
                     <div className="grid md:grid-cols-3 gap-8">
@@ -34,10 +39,10 @@ export const NewsSection = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-end mb-12">
                     <div>
-                        <h2 className="text-3xl font-bold text-gray-900">Actualités & Événements</h2>
-                        <p className="mt-4 text-lg text-gray-600">Restez informés de nos dernières activités.</p>
+                        <h2 className="text-3xl font-bold text-gray-900">{t('news_section_title')}</h2>
+                        <p className="mt-4 text-lg text-gray-600">{t('news_section_subtitle')}</p>
                     </div>
-                    <Button variant="outline" className="hidden md:flex">Voir tout</Button>
+                    <Button variant="outline" className="hidden md:flex">{t('news_view_all')}</Button>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-8">
@@ -47,17 +52,21 @@ export const NewsSection = () => {
                                 <img 
                                     src={item.imageUrl || `https://source.unsplash.com/random/800x600?tech,event&sig=${item.id}`} 
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                                    alt={item.title} 
+                                    alt={getLocalizedContent(item.title, i18n.language)} 
                                 />
                             </div>
                             <span className="text-primary text-sm font-semibold">{item.type}</span>
-                            <h3 className="text-xl font-bold mt-2 mb-2 group-hover:text-primary transition-colors">{item.title}</h3>
-                            <p className="text-gray-600 line-clamp-2">{item.body}</p>
+                            <h3 className="text-xl font-bold mt-2 mb-2 group-hover:text-primary transition-colors">
+                                {getLocalizedContent(item.title, i18n.language)}
+                            </h3>
+                            <p className="text-gray-600 line-clamp-2">
+                                {getLocalizedContent(item.body, i18n.language)}
+                            </p>
                         </div>
                      ))}
                      {(!news || news.length === 0) && (
                         <div className="col-span-3 text-center text-gray-500 py-12">
-                            Aucune actualité pour le moment.
+                            {t('news_empty')}
                         </div>
                      )}
                 </div>

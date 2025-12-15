@@ -9,7 +9,6 @@ import path from 'path';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './config/swagger.js';
 
-import { apiLimiter } from './middleware/rateLimit.middleware.js';
 import { notFound, errorHandler } from './middleware/error.middleware.js';
 
 import authRoutes from './routes/auth.routes.js';
@@ -26,14 +25,11 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: process.env.BASE_URL,
+  origin: process.env.CLIENT_URL || process.env.BASE_URL,
   credentials: true,
 }));
 app.use(helmet());
 app.use(morgan('dev'));
-
-// Rate Limiting
-app.use('/api', apiLimiter);
 
 // Routes
 app.use('/api/auth', authRoutes);

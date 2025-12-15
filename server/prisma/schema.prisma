@@ -28,10 +28,11 @@ model Registration {
   updatedAt DateTime           @updatedAt
 }
 
+
 model Content {
   id        String      @id @default(uuid())
-  title     String
-  body      String
+  title     Json
+  body      Json
   type      ContentType
   imageUrl  String?
   published Boolean     @default(true)
@@ -41,15 +42,16 @@ model Content {
 
 model HeroSlide {
   id          String   @id @default(uuid())
-  title       String
+  title       Json
   subtitle    String?
-  description String?
+  description Json?
   imageUrl    String
   order       Int      @default(0)
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
 
 enum Role {
   USER

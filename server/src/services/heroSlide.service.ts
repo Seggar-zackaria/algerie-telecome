@@ -1,4 +1,5 @@
 import { prisma } from '../prisma.js';
+import { Prisma } from '@prisma/client';
 
 export const getAllHeroSlides = async () => {
   return await prisma.heroSlide.findMany({
@@ -7,9 +8,9 @@ export const getAllHeroSlides = async () => {
 };
 
 export const createHeroSlide = async (data: {
-  title: string;
+  title: Prisma.InputJsonValue;
   subtitle?: string;
-  description?: string;
+  description?: Prisma.InputJsonValue;
   imageUrl: string;
   order: number;
   isActive: boolean;
@@ -22,9 +23,9 @@ export const createHeroSlide = async (data: {
 export const updateHeroSlide = async (
   id: string,
   data: {
-    title?: string;
+    title?: Prisma.InputJsonValue;
     subtitle?: string;
-    description?: string;
+    description?: Prisma.InputJsonValue;
     imageUrl?: string;
     order?: number;
     isActive?: boolean;

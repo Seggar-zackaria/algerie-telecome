@@ -1,4 +1,3 @@
-
 import {
   Carousel,
   CarouselContent,
@@ -10,10 +9,13 @@ import {
 import { useState, useSyncExternalStore, useCallback } from 'react';
 import { useHeroSlides } from '@/hooks/useHeroSlide';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useTranslation } from 'react-i18next';
+import { getLocalizedContent } from '@/lib/i18n-utils';
 
 export const HeroSection = () => {
   const [api, setApi] = useState<CarouselApi>()
   const { data: slides = [], isLoading } = useHeroSlides();
+  const { i18n } = useTranslation();
 
   const subscribeToCarousel = useCallback((callback: () => void) => {
     if (!api) return () => {}
@@ -46,7 +48,7 @@ export const HeroSection = () => {
   }
 
   return (
-    <section className="relative h-[95vh] w-full overflow-hidden">
+    <section id="home" className="relative h-[95vh] w-full overflow-hidden">
       <Carousel setApi={setApi} className="w-full h-full">
         <CarouselContent className="h-full -ml-0">
           {slides.filter(s => s.isActive).map((slide) => (
@@ -54,7 +56,7 @@ export const HeroSection = () => {
               <div className="absolute inset-0">
                 <img 
                   src={slide.imageUrl} 
-                  alt={slide.title}
+                  alt={getLocalizedContent(slide.title, i18n.language)}
                   className="w-full h-full object-cover object-center transition-transform duration-1000 group-hover:scale-105"
                 />
               </div>
@@ -64,13 +66,13 @@ export const HeroSection = () => {
               <div className="absolute inset-0 flex items-center justify-center p-4">
                  <div className="bg-black/30 backdrop-blur-md border border-white/10 p-8 md:p-12 rounded-3xl max-w-4xl text-center space-y-6 shadow-2xl animate-in fade-in zoom-in duration-700 slide-in-from-bottom-8">
                     <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-4 drop-shadow-lg">
-                      {slide.title}
+                      {getLocalizedContent(slide.title, i18n.language)}
                     </h1>
                      <div className="h-2 w-32 mx-auto rounded-full bg-gradient-to-r from-primary to-blue-600" />
                     
                     {slide.description && (
                       <p className="text-lg md:text-2xl text-gray-200 font-light max-w-2xl mx-auto drop-shadow-md">
-                        {slide.description}
+                        {getLocalizedContent(slide.description, i18n.language)}
                       </p>
                     )}
                  </div>

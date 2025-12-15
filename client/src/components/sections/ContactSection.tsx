@@ -1,55 +1,65 @@
 import { MapPin, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
+import { AlgeriaMap } from '@/components/ui/AlgeriaMap';
 
 export const ContactSection = () => {
+    const { t } = useTranslation();
+
     return (
-        <section id="location" className="py-24 bg-white">
+        <section id="location" className="py-24 bg-gray-50">
              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="rounded-3xl bg-primary overflow-hidden shadow-2xl relative">
-                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="rounded-3xl bg-white overflow-hidden shadow-xl border border-gray-100 relative"
+                >
                     <div className="grid lg:grid-cols-2">
-                        <div className="p-12 lg:p-16 text-white space-y-8 relative z-10">
-                            <h2 className="text-3xl font-bold">Rendez-nous visite</h2>
-                            <p className="text-blue-100 text-lg">
-                                Venez découvrir nos installations et rencontrer notre équipe. Nous sommes impatients de vous accueillir.
-                            </p>
+                        <div className="p-12 lg:p-16 space-y-8 relative z-10">
+                            <div>
+                                <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#2979FF] to-[#00E5FF] mb-4">
+                                    {t('contact_title')}
+                                </h2>
+                                <p className="text-gray-600 text-lg leading-relaxed">
+                                    {t('contact_description')}
+                                </p>
+                            </div>
                             
                             <div className="space-y-6">
-                                <div className="flex items-start gap-4">
-                                    <div className="p-3 bg-white/10 rounded-lg">
+                                <div className="flex items-start gap-4 group">
+                                    <div className="p-3 bg-blue-50 text-primary rounded-xl group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                                         <MapPin className="w-6 h-6" />
                                     </div>
                                     <div>
-                                        <h4 className="font-semibold text-lg">Annaba & Sétif</h4>
-                                        <p className="text-blue-200">Nos centres principaux</p>
+                                        <h4 className="font-semibold text-lg text-gray-900">{t('contact_centers_title')}</h4>
+                                        <p className="text-gray-500">{t('contact_centers_subtitle')}</p>
                                     </div>
                                 </div>
-                                <div className="flex items-start gap-4">
-                                    <div className="p-3 bg-white/10 rounded-lg">
+                                <div className="flex items-start gap-4 group">
+                                    <div className="p-3 bg-blue-50 text-primary rounded-xl group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                                         <Clock className="w-6 h-6" />
                                     </div>
                                     <div>
-                                        <h4 className="font-semibold text-lg">Horaires d'ouverture</h4>
-                                        <p className="text-blue-200">Dim - Jeu: 08:00 - 17:00</p>
+                                        <h4 className="font-semibold text-lg text-gray-900">{t('contact_hours_title')}</h4>
+                                        <p className="text-gray-500">{t('contact_hours_subtitle')}</p>
                                     </div>
                                 </div>
                             </div>
                             
-                            <Button className="bg-white text-primary hover:bg-gray-100 hover:text-blue-700 rounded-full px-8 py-6 text-lg font-semibold shadow-lg">
-                                Obtenir l'itinéraire
+                            <Button className="bg-gradient-to-r from-[#2979FF] to-[#00E5FF] hover:opacity-90 text-white rounded-full px-8 py-6 text-lg font-semibold shadow-lg shadow-blue-200 transition-all hover:shadow-xl hover:-translate-y-1">
+                                {t('contact_get_directions')}
                             </Button>
                         </div>
-                        <div className="bg-gray-200 h-96 lg:h-auto relative">
-                             {/* Map Placeholder or simple image */}
-                            <img 
-                                src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=1000" 
-                                alt="Map Location" 
-                                className="w-full h-full object-cover opacity-90" 
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-l from-primary/50 to-transparent lg:hidden"></div>
+                        <div className="bg-gray-100 h-96 lg:h-auto relative overflow-hidden p-8 flex items-center justify-center">
+                             <AlgeriaMap />
+                             {/* Gradient Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent pointer-events-none"></div>
                         </div>
                     </div>
-                </div>
+                </motion.div>
              </div>
         </section>
     )

@@ -1,12 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/api';
+import type { LocalizedContent } from '@/lib/i18n-utils';
 
 export type ContentType = 'NEWS' | 'EVENT' | 'TESTIMONIAL' | 'ABOUT_SECTION';
 
 export interface Content {
   id: string;
-  title: string;
-  body: string;
+  title: LocalizedContent;
+  body: LocalizedContent;
   type: ContentType;
   imageUrl?: string;
   published: boolean;

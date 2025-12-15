@@ -1,34 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
+import { useQueryClient } from '@tanstack/react-query';
+import { useCurrentUser } from '@/hooks/useAuth';
 import api from "@/lib/api";
 import type { User } from "@/types/auth.types";
 import { AuthContext } from "./auth-store";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  const queryClient = useQueryClient();
+  const { data: user, isLoading: loading, isSuccess } = useCurrentUser();
 
-  React.useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await api.get('/auth/me');
-        setUser(response.data);
-        setIsAuthenticated(true);
-      } catch {
-        // Not authenticated
-        setUser(null);
-        setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    checkAuth();
-  }, []);
+  // Derived state
+  const isAuthenticated = isSuccess && !!user;
 
   const login = (_token: string, userData: User) => {
-    setUser(userData);
-    setIsAuthenticated(true);
+    queryClient.setQueryData(['currentUser'], userData);
   };
 
   const logout = async () => {
@@ -37,12 +22,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       console.error("Logout failed", error);
     }
-    setUser(null);
-    setIsAuthenticated(false);
+    queryClient.setQueryData(['currentUser'], null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated, loading }}>
+    <AuthContext.Provider value={{ user: user || null, login, logout, isAuthenticated, loading }}>
       {children}
     </AuthContext.Provider>
   );
