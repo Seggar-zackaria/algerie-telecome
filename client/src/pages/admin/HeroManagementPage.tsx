@@ -28,7 +28,7 @@ export function HeroManagementPage() {
   }
 
   const handleSuccess = () => {
-      // Form component handles closing, but we might want to trigger toast here or just rely on react-query invalidation
+    setIsOpen(false);
   }
 
   return (

@@ -25,22 +25,18 @@ export const Navbar = () => {
     e.preventDefault();
     setIsOpen(false);
 
-    // If we're on the home page
     if (location.pathname === '/') {
-      // For home link
       if (href === '/') {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
 
-      // For specific sections
       const elementId = href.replace('/#', '');
       const element = document.getElementById(elementId);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
       }
     } else {
-      // Navigate to the page with hash
       navigate(href);
     }
   };

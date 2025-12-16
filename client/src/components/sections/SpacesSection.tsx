@@ -12,8 +12,6 @@ const AnimatedPath = () => {
     });
 
     const pathLength = useTransform(scrollYProgress, [0, 0.8], [0, 1]);
-
-    // We'll draw one main path and shift the others slightly
     
     // Royal Blue: #4169E1
     // Royal Purple: #7851A9
@@ -67,9 +65,9 @@ const AnimatedPath = () => {
                     animate={{ strokeDashoffset: -16 }}
                     transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                     opacity="0.8"
-                    mask="url(#fadeMask)" // Optional: if we wanted to mask ends, but keep simple for now
+                    mask="url(#fadeMask)"
                     filter="url(#glow)"
-                    style={{ pathLength }} // Only show where the line has drawn
+                    style={{ pathLength }}
                 />
 
                  {/* Path 2 (Left Offset) */}
@@ -82,11 +80,10 @@ const AnimatedPath = () => {
                     opacity="0.4"
                 />
                 
-                {/* Data Packet Path 2 (Slower) */}
                 <motion.path
                     d="M 48 0 C 88 20, 88 30, 48 50 S 8 80, 48 100"
                     fill="none"
-                    stroke="#2979FF" // Electric Blue packet
+                    stroke="#2979FF"
                     strokeWidth="0.8"
                     strokeDasharray="2 25"
                     strokeLinecap="round"
@@ -107,11 +104,10 @@ const AnimatedPath = () => {
                     opacity="0.4"
                 />
 
-                 {/* Data Packet Path 3 (Slower/Reverse visual feel by timing) */}
                 <motion.path
                     d="M 52 0 C 92 20, 92 30, 52 50 S 12 80, 52 100"
                     fill="none"
-                    stroke="#00E5FF" // Cyan packet
+                    stroke="#00E5FF"
                     strokeWidth="0.8"
                     strokeDasharray="2 30"
                     strokeLinecap="round"

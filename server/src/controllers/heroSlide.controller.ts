@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import * as heroSlideService from '../services/heroSlide.service.js';
+import { deleteFile } from '../utils/file.utils.js';
 
 // @desc    Get all hero slides
 // @route   GET /api/hero-slides
@@ -55,6 +56,14 @@ export const updateHeroSlide = async (req: Request, res: Response) => {
         isActive,
     };
 
+    // Check if we need to delete old image
+    if (imageUrl) {
+      const existingSlide = await heroSlideService.getHeroSlideById(id);
+      if (existingSlide && existingSlide.imageUrl && existingSlide.imageUrl !== imageUrl) {
+        deleteFile(existingSlide.imageUrl);
+      }
+    }
+
     const slide = await heroSlideService.updateHeroSlide(id, updateData);
     res.json(slide);
   } catch (_error) {
@@ -68,6 +77,10 @@ export const updateHeroSlide = async (req: Request, res: Response) => {
 export const deleteHeroSlide = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+    const slide = await heroSlideService.getHeroSlideById(id);
+    if (slide && slide.imageUrl) {
+      deleteFile(slide.imageUrl);
+    }
     await heroSlideService.deleteHeroSlide(id);
     res.json({ message: 'Slide removed' });
   } catch (_error) {

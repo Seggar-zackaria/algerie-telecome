@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { ContentType } from '@prisma/client';
 import * as contentService from '../services/content.service.js';
+import { deleteFile } from '../utils/file.utils.js';
 
 // @desc    Get all content (Public, with optional type filter)
 // @route   GET /api/content
@@ -68,6 +69,14 @@ export const updateContent = async (req: Request, res: Response) => {
         published,
     };
 
+    // Check if we need to delete old image
+    if (imageUrl) {
+      const existingContent = await contentService.getContentById(id);
+      if (existingContent && existingContent.imageUrl && existingContent.imageUrl !== imageUrl) {
+        deleteFile(existingContent.imageUrl);
+      }
+    }
+
     const content = await contentService.updateContent(id, updateData);
     res.json(content);
   } catch (_error) {
@@ -82,6 +91,10 @@ export const deleteContent = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
+    const content = await contentService.getContentById(id);
+    if (content && content.imageUrl) {
+      deleteFile(content.imageUrl);
+    }
     await contentService.deleteContent(id);
     res.json({ message: 'Content removed' });
   } catch (_error) {

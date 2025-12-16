@@ -2,10 +2,17 @@ import { DataTable } from "@/components/ui/data-table/data-table";
 import { DataTableColumnHeader } from "@/components/ui/data-table/data-table-column-header";
 import { useRegistrationsQuery, useUpdateRegistrationStatusMutation } from "@/hooks/useRegistrations";
 import type { Registration } from "@/hooks/useRegistrations";
-import { Check, X } from "lucide-react";
+import { Check, X, Eye } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 
 export const RegistrationsPage = () => {
@@ -16,7 +23,7 @@ export const RegistrationsPage = () => {
     {
       accessorKey: "fullName",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Name" />
+        <DataTableColumnHeader column={column} title="Nom" />
       ),
     },
     {
@@ -33,7 +40,7 @@ export const RegistrationsPage = () => {
     },
     {
       accessorKey: "status",
-      header: "Status",
+      header: "Statut",
       cell: ({ row }) => {
         const status = row.getValue("status") as string;
         return (
@@ -69,38 +76,94 @@ export const RegistrationsPage = () => {
       id: "actions",
       cell: ({ row }) => {
         const registration = row.original;
-        if (registration.status !== "PENDING") return null;
 
         return (
           <div className="flex gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-green-600 hover:bg-green-50 hover:text-green-700"
-              onClick={() =>
-                updateStatusMutation.mutate({
-                  id: registration.id,
-                  status: "APPROVED",
-                })
-              }
-              disabled={updateStatusMutation.isPending}
-            >
-              <Check className="w-4 h-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-red-600 hover:bg-red-50 hover:text-red-700"
-              onClick={() =>
-                updateStatusMutation.mutate({
-                  id: registration.id,
-                  status: "REJECTED",
-                })
-              }
-              disabled={updateStatusMutation.isPending}
-            >
-              <X className="w-4 h-4" />
-            </Button>
+            <Dialog>
+                <DialogTrigger asChild>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-blue-600 hover:bg-blue-50 hover:text-blue-700"
+                    >
+                        <Eye className="w-4 h-4" />
+                    </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[500px]">
+                    <DialogHeader>
+                        <DialogTitle>Détails de l'Inscription</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <h4 className="font-semibold text-sm text-gray-500">Nom Complet</h4>
+                                <p className="text-gray-900">{registration.fullName}</p>
+                            </div>
+                            <div>
+                                <h4 className="font-semibold text-sm text-gray-500">Email</h4>
+                                <p className="text-gray-900">{registration.email}</p>
+                            </div>
+                            <div>
+                                <h4 className="font-semibold text-sm text-gray-500">Téléphone</h4>
+                                <p className="text-gray-900">{registration.phone}</p>
+                            </div>
+                            <div>
+                                <h4 className="font-semibold text-sm text-gray-500">Type</h4>
+                                <p className="text-gray-900 capitalize">{registration.type}</p>
+                            </div>
+                             <div>
+                                <h4 className="font-semibold text-sm text-gray-500">Centre</h4>
+                                <p className="text-gray-900">{registration.center || '-'}</p>
+                            </div>
+                             <div>
+                                <h4 className="font-semibold text-sm text-gray-500">Nature de l'espace</h4>
+                                <p className="text-gray-900 capitalize">{registration.spaceType?.replace(/_/g, ' ') || '-'}</p>
+                            </div>
+                             <div className="col-span-2">
+                                <h4 className="font-semibold text-sm text-gray-500">Message</h4>
+                                <p className="text-gray-900 whitespace-pre-wrap">{registration.message || '-'}</p>
+                            </div>
+                             <div className="col-span-2">
+                                <h4 className="font-semibold text-sm text-gray-500">Date</h4>
+                                <p className="text-gray-900">{new Date(registration.createdAt).toLocaleString()}</p>
+                            </div>
+                        </div>
+                    </div>
+                </DialogContent>
+            </Dialog>
+
+            {registration.status === "PENDING" && (
+                <>
+                    <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-green-600 hover:bg-green-50 hover:text-green-700"
+                    onClick={() =>
+                        updateStatusMutation.mutate({
+                        id: registration.id,
+                        status: "APPROVED",
+                        })
+                    }
+                    disabled={updateStatusMutation.isPending}
+                    >
+                    <Check className="w-4 h-4" />
+                    </Button>
+                    <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-red-600 hover:bg-red-50 hover:text-red-700"
+                    onClick={() =>
+                        updateStatusMutation.mutate({
+                        id: registration.id,
+                        status: "REJECTED",
+                        })
+                    }
+                    disabled={updateStatusMutation.isPending}
+                    >
+                    <X className="w-4 h-4" />
+                    </Button>
+                </>
+            )}
           </div>
         );
       },
@@ -108,13 +171,13 @@ export const RegistrationsPage = () => {
   ];
 
   if (isLoading) {
-      return <div>Loading...</div>
+      return <div>Chargement...</div>
   }
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-800">Registrations</h1>
+        <h1 className="text-2xl font-bold text-gray-800">Inscriptions</h1>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border overflow-hidden p-4">

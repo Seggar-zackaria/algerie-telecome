@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-// Define enums locally to avoid importing massive @prisma/client in frontend
 export const ContentType = {
   NEWS: 'NEWS',
   EVENT: 'EVENT',
@@ -15,7 +14,6 @@ export const RegistrationStatus = {
 } as const;
 
 
-// --- Shared Schemas ---
 const localizedStringSchema = z.object({
   en: z.string().min(1, 'English text is required'),
   fr: z.string().min(1, 'French text is required'),
@@ -24,7 +22,7 @@ const localizedStringSchema = z.object({
 
 // --- Auth Schemas ---
 export const loginBodySchema = z.object({
-  email: z.string().email('Invalid email address'),
+  email: z.email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
@@ -34,7 +32,7 @@ export const loginSchema = z.object({
 
 export const registerAdminBodySchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
+  email: z.email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
@@ -43,13 +41,11 @@ export const registerAdminSchema = z.object({
 });
 
 // --- Hero Slide Schemas ---
-// Reusable schema for the form data itself
 export const heroSlideBodySchema = z.object({
   title: localizedStringSchema,
   subtitle: z.string().optional(),
   description: localizedStringSchema.optional(),
   imageUrl: z.string().min(1, 'Image is required'),
-  // Coerce order because form data might be strings, but usage in code desires numbers
   order: z.union([z.string(), z.number()]).pipe(z.coerce.number()).default(0),
   isActive: z.boolean().optional().default(true),
 });
@@ -80,7 +76,7 @@ export const createContentSchema = z.object({
 
 export const updateContentSchema = z.object({
   params: z.object({
-    id: z.string().uuid('Invalid ID format'),
+    id: z.uuid('Invalid ID format'),
   }),
   body: contentFormSchema.partial(),
 });

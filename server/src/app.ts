@@ -25,7 +25,12 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: process.env.CLIENT_URL || process.env.BASE_URL,
+  origin: [
+    process.env.CLIENT_URL,
+    process.env.BASE_URL,
+    'http://localhost:5173',
+    'http://localhost:4173'
+  ].filter((origin): origin is string => !!origin),
   credentials: true,
 }));
 app.use(helmet());

@@ -7,6 +7,8 @@ export const createRegistration = async (data: {
   email: string;
   phone: string;
   type: string;
+  center: string;
+  spaceType: string;
   message: string;
 }) => {
   return await prisma.registration.create({

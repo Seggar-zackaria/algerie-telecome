@@ -3,9 +3,9 @@ import type { LocalizedContent } from "@/lib/i18n-utils";
 
 export interface HeroSlide {
   id: string;
-  title: LocalizedContent; // Changed to support i18n
+  title: LocalizedContent;
   subtitle?: string;
-  description?: LocalizedContent; // Changed to support i18n
+  description?: LocalizedContent;
   imageUrl: string;
   order: number;
   isActive: boolean;

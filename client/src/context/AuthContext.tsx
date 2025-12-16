@@ -9,7 +9,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const queryClient = useQueryClient();
   const { data: user, isLoading: loading, isSuccess } = useCurrentUser();
 
-  // Derived state
   const isAuthenticated = isSuccess && !!user;
 
   const login = (_token: string, userData: User) => {

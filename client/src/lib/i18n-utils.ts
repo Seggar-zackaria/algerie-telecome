@@ -9,9 +9,9 @@ export const getLocalizedContent = (
   language: string
 ): string => {
   if (!content) return '';
-  if (typeof content === 'string') return content; // Fallback for old data
+  if (typeof content === 'string') return content;
   
-  const lang = language.split('-')[0]; // Handle 'en-US'
+  const lang = language.split('-')[0];
   
   if (content[lang as keyof LocalizedContent]) {
       return content[lang as keyof LocalizedContent];

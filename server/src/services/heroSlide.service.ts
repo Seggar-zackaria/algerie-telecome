@@ -7,6 +7,12 @@ export const getAllHeroSlides = async () => {
   });
 };
 
+export const getHeroSlideById = async (id: string) => {
+  return await prisma.heroSlide.findUnique({
+    where: { id },
+  });
+};
+
 export const createHeroSlide = async (data: {
   title: Prisma.InputJsonValue;
   subtitle?: string;

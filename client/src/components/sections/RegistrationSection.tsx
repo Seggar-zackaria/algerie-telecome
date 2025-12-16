@@ -17,6 +17,8 @@ const schema = z.object({
   email: z.string().email("Email invalide"),
   phone: z.string().min(10, "Numéro de téléphone invalide"),
   type: z.string().min(1, "Veuillez sélectionner un type"),
+  center: z.string().min(1, "Veuillez sélectionner un centre"),
+  spaceType: z.string().min(1, "Veuillez sélectionner la nature de l'espace"),
   message: z.string().optional(),
 });
 
@@ -102,6 +104,41 @@ export const RegistrationSection = () => {
                             <option value="startup">{t('register_form_type_startup')}</option>
                         </select>
                         {errors.type && <p className="text-sm text-red-500">{errors.type.message}</p>}
+                    </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                        <Label htmlFor="center">Centre de Compétences</Label>
+                        <select 
+                            id="center"
+                            {...register("center")}
+                            className={cn(
+                                "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            )}
+                        >
+                            <option value="">Sélectionnez un centre</option>
+                            <option value="Annaba">Skill Center Annaba</option>
+                            <option value="Setif">Skill Center Setif</option>
+                        </select>
+                        {errors.center && <p className="text-sm text-red-500">{errors.center.message}</p>}
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="spaceType">Nature de l'espace à exploiter</Label>
+                        <select 
+                            id="spaceType"
+                            {...register("spaceType")}
+                            className={cn(
+                                "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            )}
+                        >
+                            <option value="">Sélectionnez la nature de l'espace</option>
+                            <option value="espace_formation">Espace Formation</option>
+                            <option value="espace_conference">Espace Conférence</option>
+                            <option value="espace_networking_coworking">Espace Networking/Coworking</option>
+                            <option value="espace_podcast">Espace Podcast</option>
+                        </select>
+                        {errors.spaceType && <p className="text-sm text-red-500">{errors.spaceType.message}</p>}
                     </div>
                 </div>
 

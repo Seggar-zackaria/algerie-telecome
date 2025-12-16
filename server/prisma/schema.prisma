@@ -22,6 +22,8 @@ model Registration {
   email     String
   phone     String
   type      String
+  center    String?
+  spaceType String?
   status    RegistrationStatus @default(PENDING)
   message   String?
   createdAt DateTime           @default(now())

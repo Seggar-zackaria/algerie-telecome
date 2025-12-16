@@ -29,6 +29,7 @@ async function main() {
   });
 
   console.info(`Admin user created: ${user.email}`);
+
 }
 
 main()

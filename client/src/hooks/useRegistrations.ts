@@ -5,8 +5,12 @@ export interface Registration {
   id: string;
   fullName: string;
   email: string;
+  phone: string;
   type: string;
-  status: string;
+  center?: string;
+  spaceType?: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
+  message?: string;
   createdAt: string;
 }
 

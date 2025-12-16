@@ -6,11 +6,11 @@ import * as registrationService from '../services/registration.service.js';
 // @route   POST /api/registrations
 // @access  Public
 export const createRegistration = async (req: Request, res: Response) => {
-  const { fullName, email, phone, type, message } = req.body;
+  const { fullName, email, phone, type, center, spaceType, message } = req.body;
 
   try {
     const registration = await registrationService.createRegistration({
-        fullName, email, phone, type, message
+        fullName, email, phone, type, center, spaceType, message
     });
     res.status(201).json(registration);
   } catch (error) {

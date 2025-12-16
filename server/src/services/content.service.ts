@@ -18,6 +18,12 @@ export const getAllContentAdmin = async () => {
   });
 };
 
+export const getContentById = async (id: string) => {
+  return await prisma.content.findUnique({
+    where: { id },
+  });
+};
+
 export const createContent = async (data: {
   title: Prisma.InputJsonValue;
   body: Prisma.InputJsonValue;

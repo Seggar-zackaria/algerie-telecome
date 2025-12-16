@@ -28,7 +28,7 @@ export const ContentPage = () => {
     };
 
     const handleSuccess = () => {
-        // Additional success actions if needed
+        setIsOpen(false);
     };
 
   return (

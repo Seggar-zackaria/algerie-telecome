@@ -91,6 +91,8 @@ export const registrationBodySchema = z.object({
   email: z.string().email('Invalid email address'),
   phone: z.string().min(9, 'Phone number must be at least 9 digits'),
   type: z.string().min(1, 'Type is required'),
+  center: z.string().min(1, 'Center is required'),
+  spaceType: z.string().min(1, 'Space type is required'),
   message: z.string().min(1, 'Message is required'),
 });
 

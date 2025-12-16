@@ -24,9 +24,8 @@ import type { LocalizedContent } from "@/lib/i18n-utils";
 
 import { heroSlideBodySchema as slideSchema } from "@/lib/validation";
 
-// Ensure schema forces valid URL for frontend (server schema only checks min(1))
 const frontendSlideSchema = slideSchema.extend({
-    imageUrl: z.string().url("Must be a valid URL").min(1, "Image is required"),
+    imageUrl: z.string("Must be a valid URL").min(1, "Image is required"),
 });
 
 export type SlideFormValues = z.infer<typeof frontendSlideSchema>;
